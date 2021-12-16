@@ -1,20 +1,26 @@
 /// <reference types="cypress" />
+import EnderecoCompra from '../support/page_objects/nome-funcionliada.page'
+var  faker  =  require  ( 'faker' ) ;
+
 
 context('Exercicio - Testes End-to-end - Fluxo de pedido', () => {
-    /*  Como cliente 
-        Quero acessar a Loja EBAC 
-        Para fazer um pedido de 4 produtos 
-        Fazendo a escolha dos produtos
-        Adicionando ao carrinho
-        Preenchendo todas opções no checkout
-        E validando minha compra ao final */
-
+   
     beforeEach(() => {
-        cy.visit('/')
+        cy.visit('produtos/')
+        cy.get(':nth-child(4) > .page-numbers').click()
     });
 
     it('Deve fazer um pedido na loja Ebac Shop de ponta a ponta', () => {
-        //TODO 
+        let emailFaker = faker.internet.email()
+
+        cy.addProdutos('Erica Evercool Sports Bra', 'S', 'Orange', 4)
+        cy.get('.woocommerce-message > .button').click()
+        cy.get('.checkout-button').click()
+        EnderecoCompra.editarEnderecoCompra('Camila', 'Garcia', 'Ebac', 'Brasil', 'Avenida do Contorno', '1555', 'Belo Horizonte', 'Minas Gerais', '30110001','319855555', emailFaker, 'senhaforte@#')
+        cy.get('.woocommerce-notice').should('contain' , 'Obrigado. Seu pedido foi recebido.')
+        
+
+
     });
 
 
